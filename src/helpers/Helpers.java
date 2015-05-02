@@ -1,9 +1,13 @@
 package helpers;
 
+import java.util.Random;
+
 /**
  * Created by gogen on 29.04.15.
  */
 public class Helpers {
+
+    private static Random rand = new Random();
 
     public static double getMaxForAllX(double[] listOfCos, int ring, double previousDelta, int[] set){
         double resultingDelta = 0;
@@ -18,7 +22,11 @@ public class Helpers {
         return resultingDelta;
     }
 
-    public static String showArray(int[] arr){
+    public static Random getRandomizer(){
+        return rand;
+    }
+
+    public static String showArray(Integer[] arr){
         String s = "[" + arr[0];
         for(int i = 1; i < arr.length; i++){
             s += "," + arr[i];
@@ -48,5 +56,13 @@ public class Helpers {
             list[i] = Math.cos(2 * Math.PI * i / ring);
         }
         return list;
+    }
+
+    public static int[] calcRandomSet(int ring, int deep){
+        int[] set = new int[deep];
+        for(int i = 0; i < deep; i++){
+            set[i] = rand.nextInt(ring);
+        }
+        return set;
     }
 }

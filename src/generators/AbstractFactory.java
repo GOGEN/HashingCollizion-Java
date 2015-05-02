@@ -1,21 +1,30 @@
 package generators;
 
+import helpers.Helpers;
+
 /**
  * Created by gogen on 29.04.15.
  */
-public abstract class AbstractFactory implements Factory {
+abstract class AbstractFactory implements Factory {
     int ring;
     int deep;
-    int[] currSet;
+    double[] listOfCos;
+    double stoppingCriteria;
 
-    public AbstractFactory(int ring){
+
+    public AbstractFactory(int ring, double delta){
         this.ring = ring;
+        deep = 1;
+        listOfCos = Helpers.calcListOfCos(ring);
+        stoppingCriteria = delta;
     }
 
-    @Override
-    public void changeDeep(int deep) {
+    public void nextDeep(){
+        deep++;
+    }
+
+    public void changeDeep(int deep){
         this.deep = deep;
-        currSet = new int[deep];
     }
 
     public int getDeep(){
