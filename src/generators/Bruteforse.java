@@ -54,7 +54,6 @@ public class Bruteforse extends AbstractFactory {
             }
         }
         if(index == 0 && set[index] == 0){
-            changeDeep(deep + 1);
             return null;
         }else{
             return set;

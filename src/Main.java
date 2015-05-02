@@ -18,7 +18,7 @@ public class Main {
             conn = DriverManager.getConnection("jdbc:sqlite:hashing.db");
             System.out.println("Opened database successfully");
             IMinimization minmize = IMinimization.init(conn, Factory.initBruteforse(ring, delta), ring, delta);
-            minmize.start(14, true);
+            minmize.start(14, false);
             conn.close();
         } catch ( Exception e ) {
             System.err.println( e.getClass().getName() + ": " + e.getMessage() );
