@@ -11,10 +11,23 @@ public class Helpers {
 
     public static double getMaxForAllX(double[] listOfCos, int ring, double previousDelta, int[] set){
         double resultingDelta = 0;
-        for(int x = 1; x <= ring/2  + 1 + ring % 2; x++){
+        for(int x = 1; x <= ring/2  + ring % 2; x++){
             float currentDelta = Math.abs(partialSum(listOfCos, ring, set, x));
             if(currentDelta > previousDelta){
                 resultingDelta = previousDelta;
+                break;
+            }
+            resultingDelta = Math.max(resultingDelta, currentDelta);
+        }
+        return resultingDelta;
+    }
+
+    public static double getMaxForAllXOrOne(double[] listOfCos, int ring, double previousDelta, int[] set){
+        double resultingDelta = 0;
+        for(int x = 1; x <= ring/2  + ring % 2; x++){
+            float currentDelta = Math.abs(partialSum(listOfCos, ring, set, x));
+            if(currentDelta > previousDelta){
+                resultingDelta = 1.0;
                 break;
             }
             resultingDelta = Math.max(resultingDelta, currentDelta);
@@ -61,7 +74,7 @@ public class Helpers {
     public static int[] calcRandomSet(int ring, int deep){
         int[] set = new int[deep];
         for(int i = 0; i < deep; i++){
-            set[i] = rand.nextInt(ring);
+            set[i] = rand.nextInt(ring/2);
         }
         return set;
     }

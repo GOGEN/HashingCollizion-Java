@@ -31,9 +31,17 @@ public class Genetic extends AbstractFactory {
     }
 
     @Override
-    public Tuple<Integer[], Double> getBestSet(double delta) {
+    public Tuple<Integer[], Double> getBetterSet(double delta) {
         Chromosome chr = population.runGA();
         if(chr.fitness >= delta)
+            return null;
+        return new <Integer[], Double>Tuple(ArrayUtils.toObject(chr.genes), chr.fitness);
+    }
+
+    @Override
+    public Tuple<Integer[], Double> getSetForDelta() {
+        Chromosome chr = population.runGA();
+        if(chr.fitness >= stoppingCriteria)
             return null;
         return new <Integer[], Double>Tuple(ArrayUtils.toObject(chr.genes), chr.fitness);
     }
@@ -60,7 +68,7 @@ public class Genetic extends AbstractFactory {
         public Chromosome mutation(double genomMutateProbability){
             for(int i = 0; i< genes.length; i++){
                 if(Helpers.getRandomizer().nextDouble() < genomMutateProbability){
-                    genes[i] = (genes[i] + 1 - Helpers.getRandomizer().nextInt(2)) % ring;
+                    genes[i] = (genes[i] + 1 - Helpers.getRandomizer().nextInt(3) + ring/2) % (ring/2);
                 }
             }
             fitness = 1.0;
@@ -76,7 +84,7 @@ public class Genetic extends AbstractFactory {
             for(int i = idx; i < genes.length; i++){
                 newGenes[i] = chr.genes[i];
             }
-            return new Chromosome(genes);
+            return new Chromosome(newGenes);
         }
 
         public double fitness(){
@@ -95,12 +103,12 @@ public class Genetic extends AbstractFactory {
         private MinMaxPriorityQueue<Chromosome> population;
         private int populationSize;
         private int generationIndex;
-        private int generationsMaxCount = 20;
+        private int generationsMaxCount = 100;
         private double mutationProbability = 0.25;
         private double genomeMutationProbability = 0.1;
 
         public Population(){
-            populationSize = (int)Math.pow(2, deep);
+            populationSize = deep;
             population = MinMaxPriorityQueue.orderedBy(new Comparator<Chromosome>() {
                 @Override
                 public int compare(Chromosome o1, Chromosome o2) {
@@ -130,7 +138,7 @@ public class Genetic extends AbstractFactory {
             }
         }
 
-        public Chromosome runGA(){
+        private Chromosome runGA(){
             initGeneration();
             Chromosome chr = population.peek();
             while(chr.fitness() > stoppingCriteria && generationIndex < generationsMaxCount){
@@ -144,7 +152,7 @@ public class Genetic extends AbstractFactory {
         }
 
         private Chromosome mutate(Chromosome chr){
-            if(Helpers.getRandomizer().nextDouble() < mutationProbability){
+            if(Helpers.getRandomizer().nextDouble() < 1.0){
                 return chr.mutation(genomeMutationProbability);
             }
             return chr;

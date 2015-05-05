@@ -20,7 +20,9 @@ public interface Factory {
 
     public void nextDeep();
 
-    public Tuple<Integer[], Double> getBestSet(double delta);
+    public Tuple<Integer[], Double> getBetterSet(double delta);
+
+    public Tuple<Integer[], Double> getSetForDelta();
 
     public void changeDeep(int deep);
 

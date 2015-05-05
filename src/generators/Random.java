@@ -4,22 +4,24 @@ import helpers.Helpers;
 import helpers.Tuple;
 import org.apache.commons.lang3.ArrayUtils;
 
+import java.math.BigInteger;
+
 /**
  * Created by gogen on 30.04.15.
  */
 public class Random extends AbstractFactory {
     private final String TYPE = "random";
 
-    public int setCount;
+    public BigInteger setCount;
 
     public Random(int ring, double delta) {
         super(ring, delta);
-        setCount = (int)Math.pow(2, deep) * ring;
+        setCount = BigInteger.valueOf(deep).multiply(BigInteger.valueOf(ring));
         System.out.println("Set count: " + setCount);
     }
 
     @Override
-    public Tuple<Integer[], Double> getBestSet(double previousDelta) {
+    public Tuple<Integer[], Double> getBetterSet(double previousDelta) {
         int[] set = Helpers.calcRandomSet(ring, deep);
         int[] resultSet = null;
         double currDelta = Helpers.getMaxForAllX(listOfCos, ring, previousDelta, set);
@@ -37,9 +39,14 @@ public class Random extends AbstractFactory {
     }
 
     @Override
+    public Tuple<Integer[], Double> getSetForDelta() {
+        return getBetterSet(stoppingCriteria);
+    }
+
+    @Override
     public void changeDeep(int deep){
         super.changeDeep(deep);
-        setCount = (int)Math.pow(2, deep) * ring;
+        setCount = BigInteger.valueOf(deep).multiply(BigInteger.valueOf(ring));
         System.out.println("Set count: " + setCount);
     }
 
@@ -53,11 +60,11 @@ public class Random extends AbstractFactory {
     }
 
     public int[] nextSet() {
-        if(setCount == 0){
+        if(setCount.equals(BigInteger.ZERO)){
             return null;
         }
-        setCount --;
-        return Helpers.calcRandomSet(ring/2, deep);
+        setCount = setCount.subtract(BigInteger.ONE);
+        return Helpers.calcRandomSet(ring, deep);
     }
 
 }

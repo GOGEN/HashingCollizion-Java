@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="module_hashingcollizion" default="compile.module.hashingcollizion">
+  <dirname property="module.hashingcollizion.basedir" file="${ant.file.module_hashingcollizion}"/>
+  
+  <property name="module.jdk.home.hashingcollizion" value="${project.jdk.home}"/>
+  <property name="module.jdk.bin.hashingcollizion" value="${project.jdk.bin}"/>
+  <property name="module.jdk.classpath.hashingcollizion" value="${project.jdk.classpath}"/>
+  
+  <property name="compiler.args.hashingcollizion" value="-encoding UTF-8 -source 8 ${compiler.args}"/>
+  
+  <property name="hashingcollizion.output.dir" value="${module.hashingcollizion.basedir}/out/production/HashingCollizion"/>
+  <property name="hashingcollizion.testoutput.dir" value="${module.hashingcollizion.basedir}/out/test/HashingCollizion"/>
+  
+  <path id="hashingcollizion.module.bootclasspath">
+    <!-- Paths to be included in compilation bootclasspath -->
+  </path>
+  
+  <path id="hashingcollizion.module.production.classpath">
+    <path refid="${module.jdk.classpath.hashingcollizion}"/>
+    <path refid="library.sqlite-jdbc-3.8.7.classpath"/>
+    <path refid="library.guava-18.0.classpath"/>
+    <path refid="library.commons-lang3-3.4.classpath"/>
+  </path>
+  
+  <path id="hashingcollizion.runtime.production.module.classpath">
+    <pathelement location="${hashingcollizion.output.dir}"/>
+    <path refid="library.sqlite-jdbc-3.8.7.classpath"/>
+    <path refid="library.guava-18.0.classpath"/>
+    <path refid="library.commons-lang3-3.4.classpath"/>
+  </path>
+  
+  <path id="hashingcollizion.module.classpath">
+    <path refid="${module.jdk.classpath.hashingcollizion}"/>
+    <pathelement location="${hashingcollizion.output.dir}"/>
+    <path refid="library.sqlite-jdbc-3.8.7.classpath"/>
+    <path refid="library.guava-18.0.classpath"/>
+    <path refid="library.commons-lang3-3.4.classpath"/>
+  </path>
+  
+  <path id="hashingcollizion.runtime.module.classpath">
+    <pathelement location="${hashingcollizion.testoutput.dir}"/>
+    <pathelement location="${hashingcollizion.output.dir}"/>
+    <path refid="library.sqlite-jdbc-3.8.7.classpath"/>
+    <path refid="library.guava-18.0.classpath"/>
+    <path refid="library.commons-lang3-3.4.classpath"/>
+  </path>
+  
+  
+  <patternset id="excluded.from.module.hashingcollizion">
+    <patternset refid="ignored.files"/>
+  </patternset>
+  
+  <patternset id="excluded.from.compilation.hashingcollizion">
+    <patternset refid="excluded.from.module.hashingcollizion"/>
+  </patternset>
+  
+  <path id="hashingcollizion.module.sourcepath">
+    <dirset dir="${module.hashingcollizion.basedir}">
+      <include name="src"/>
+    </dirset>
+  </path>
+  
+  
+  <target name="compile.module.hashingcollizion" depends="compile.module.hashingcollizion.production,compile.module.hashingcollizion.tests" description="Compile module HashingCollizion"/>
+  
+  <target name="compile.module.hashingcollizion.production" depends="register.custom.compilers" description="Compile module HashingCollizion; production classes">
+    <mkdir dir="${hashingcollizion.output.dir}"/>
+    <javac2 destdir="${hashingcollizion.output.dir}" debug="${compiler.debug}" nowarn="${compiler.generate.no.warnings}" memorymaximumsize="${compiler.max.memory}" fork="true" executable="${module.jdk.bin.hashingcollizion}/javac">
+      <compilerarg line="${compiler.args.hashingcollizion}"/>
+      <bootclasspath refid="hashingcollizion.module.bootclasspath"/>
+      <classpath refid="hashingcollizion.module.production.classpath"/>
+      <src refid="hashingcollizion.module.sourcepath"/>
+      <patternset refid="excluded.from.compilation.hashingcollizion"/>
+    </javac2>
+    
+    <copy todir="${hashingcollizion.output.dir}">
+      <fileset dir="${module.hashingcollizion.basedir}/src">
+        <patternset refid="compiler.resources"/>
+        <type type="file"/>
+      </fileset>
+    </copy>
+  </target>
+  
+  <target name="compile.module.hashingcollizion.tests" depends="register.custom.compilers,compile.module.hashingcollizion.production" description="compile module HashingCollizion; test classes" unless="skip.tests"/>
+  
+  <target name="clean.module.hashingcollizion" description="cleanup module">
+    <delete dir="${hashingcollizion.output.dir}"/>
+    <delete dir="${hashingcollizion.testoutput.dir}"/>
+  </target>
+</project>
