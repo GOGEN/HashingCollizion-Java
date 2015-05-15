@@ -4,28 +4,35 @@ import helpers.Helpers;
 import helpers.Tuple;
 import org.apache.commons.lang3.ArrayUtils;
 
-import java.math.BigInteger;
 import java.util.Arrays;
 
 /**
- * Created by gogen on 29.04.15.
+ * Created by gogen on 10.05.15.
  */
-public class Bruteforse extends AbstractFactory {
-    private final String TYPE = "bruteforse";
+public class SimpleBruteforse extends AbstractFactory{
+    private final String TYPE = "simple_bruteforse";
 
     int setCount;
 
-    public Bruteforse(int ring, double delta) {
+    public SimpleBruteforse(int ring, double delta) {
         super(ring, delta);
+    }
+
+    public int[] initSet(){
+        int[] set = new int[deep];
+        for(int i = 0; i < deep; i++){
+            set[i] = i;
+        }
+        return set;
     }
 
     @Override
     public Tuple<Integer[], Double> getBestSet(double previousDelta) {
-        int[] set = new int[deep];
+        int[] set = initSet();
         setCount = 1;
         int[] resultSet = null;
-        double currDelta = Helpers.getMaxForAllXOrOne(listOfCos, ring, previousDelta, set);
-        while ((set = nextSet(set)) != null) {
+        double currDelta = Helpers.getMaxForAllX(listOfCos, ring, previousDelta, set);
+        while ((set = nextSet(set)) != null && currDelta > stoppingCriteria) {
             traceCount(set);
             currDelta = Helpers.getMaxForAllX(listOfCos, ring, previousDelta, set);
             if (currDelta < previousDelta) {
@@ -33,8 +40,9 @@ public class Bruteforse extends AbstractFactory {
                 resultSet = set.clone();
             }
         }
-        if(resultSet == null)
+        if(resultSet == null){
             return null;
+        }
         return new <Integer[], Double>Tuple(ArrayUtils.toObject(resultSet), previousDelta);
     }
 
@@ -50,7 +58,7 @@ public class Bruteforse extends AbstractFactory {
     public Tuple<Integer[], Double> getSetForDelta() {
         int[] set = new int[deep];
         int[] resultSet = null;
-        setCount = 1;
+        setCount = 0;
         double currDelta = Helpers.getMaxForAllXOrOne(listOfCos, ring, stoppingCriteria, set);
         while ((set = nextSet(set)) != null && currDelta > stoppingCriteria) {
             traceCount(set);
@@ -70,7 +78,7 @@ public class Bruteforse extends AbstractFactory {
         super.changeDeep(deep);
         setCount = 0;
     }
-    
+
     @Override
     public String getType() {
         return TYPE;
@@ -82,16 +90,20 @@ public class Bruteforse extends AbstractFactory {
         while(set[index] == 0 && index > 0){
             index --;
             set[index] = (set[index] + 1) % actualRing;
-            for(int i = index+1; i < deep;i++){
-                set[i] = set[index];
-            }
         }
-        if(index == 0 && set[index] == 0){
+        if(index == 0 && set[index] == 0)
             return null;
-        }else{
-            return set;
+        index++;
+        while(index < deep && set[index] == 0){
+            set[index] = set[index - 1];
+            if(set[index] < actualRing){
+                break;
+            }
+            index++;
         }
-
+        if(index != deep){
+            return null;
+        }
+        return set;
     }
-
 }

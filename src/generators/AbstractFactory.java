@@ -7,6 +7,7 @@ import helpers.Helpers;
  */
 abstract class AbstractFactory implements Factory {
     int ring;
+    int actualRing;
     int deep;
     double[] listOfCos;
     double stoppingCriteria;
@@ -14,13 +15,14 @@ abstract class AbstractFactory implements Factory {
 
     public AbstractFactory(int ring, double delta){
         this.ring = ring;
+        actualRing = ring/2;
         deep = 1;
         listOfCos = Helpers.calcListOfCos(ring);
         stoppingCriteria = delta;
     }
 
     public void nextDeep(){
-        deep++;
+        deep *= 2;
     }
 
     public void changeDeep(int deep){
@@ -30,4 +32,9 @@ abstract class AbstractFactory implements Factory {
     public int getDeep(){
         return deep;
     }
+
+    public int getRing(){ return ring; }
+
+    public double getStoppingCriteria(){ return stoppingCriteria; }
+
 }

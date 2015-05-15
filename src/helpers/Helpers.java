@@ -11,7 +11,7 @@ public class Helpers {
 
     public static double getMaxForAllX(double[] listOfCos, int ring, double previousDelta, int[] set){
         double resultingDelta = 0;
-        for(int x = 1; x <= ring/2  + ring % 2; x++){
+        for(int x = 1; x <= ring/2; x++){
             float currentDelta = Math.abs(partialSum(listOfCos, ring, set, x));
             if(currentDelta > previousDelta){
                 resultingDelta = previousDelta;
@@ -24,7 +24,7 @@ public class Helpers {
 
     public static double getMaxForAllXOrOne(double[] listOfCos, int ring, double previousDelta, int[] set){
         double resultingDelta = 0;
-        for(int x = 1; x <= ring/2  + ring % 2; x++){
+        for(int x = 1; x <= ring/2; x++){
             float currentDelta = Math.abs(partialSum(listOfCos, ring, set, x));
             if(currentDelta > previousDelta){
                 resultingDelta = 1.0;
@@ -39,15 +39,6 @@ public class Helpers {
         return rand;
     }
 
-    public static String showArray(Integer[] arr){
-        String s = "[" + arr[0];
-        for(int i = 1; i < arr.length; i++){
-            s += "," + arr[i];
-        }
-        s += "]";
-        return s;
-    }
-
     private static float partialSum(double[] listOfCos, int ring, int[] set, int x){
         float sum = 0;
         for(int s : set){
@@ -56,11 +47,12 @@ public class Helpers {
         return sum / set.length;
     }
 
-    public static int getLowerBound(int ring, double delta){
-        return (int)Math.round(Math.log(ring) / Math.log(2));
+    public static int getLowerBound()
+    {
+        return 2;
     }
-    public static int getHightBound(int ring, double delta){
-        return Math.min(ring, (int)Math.round(2 * Math.log(2 * ring) / Math.log(2) / delta / delta));
+    public static int getHightBound(int ring){
+        return ring/2;
     }
 
     public static double[] calcListOfCos(int ring){
@@ -74,7 +66,7 @@ public class Helpers {
     public static int[] calcRandomSet(int ring, int deep){
         int[] set = new int[deep];
         for(int i = 0; i < deep; i++){
-            set[i] = rand.nextInt(ring/2);
+            set[i] = rand.nextInt(ring);
         }
         return set;
     }

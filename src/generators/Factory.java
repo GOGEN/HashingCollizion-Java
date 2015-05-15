@@ -10,6 +10,10 @@ public interface Factory {
         return new Bruteforse(ring, delta);
     }
 
+    public static Factory initSimpleBruteforse(int ring, double delta){
+        return new SimpleBruteforse(ring, delta);
+    }
+
     public static Factory initGenetic(int ring, double delta){
         return new Genetic(ring, delta);
     }
@@ -18,9 +22,13 @@ public interface Factory {
         return new Random(ring, delta);
     }
 
+    public static Factory initAnnealer(int ring, double delta){
+        return new Annealer(ring, delta);
+    }
+
     public void nextDeep();
 
-    public Tuple<Integer[], Double> getBetterSet(double delta);
+    public Tuple<Integer[], Double> getBestSet(double delta);
 
     public Tuple<Integer[], Double> getSetForDelta();
 
@@ -29,5 +37,9 @@ public interface Factory {
     public int getDeep();
 
     public String getType();
+
+    public int getRing();
+
+    public double getStoppingCriteria();
 
 }
