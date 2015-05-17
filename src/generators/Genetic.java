@@ -59,7 +59,7 @@ public class Genetic extends AbstractFactory {
         private MinMaxPriorityQueue<Chromosome> population;
         private int populationSize;
         private int generationIndex;
-        private int generationsMaxCount = 100;
+        private int generationsMaxCount = 30;
         private double mutationProbability = 0.25;
         private double genomeMutationProbability = 0.1;
         private double generationParamForMutate;
@@ -189,7 +189,7 @@ public class Genetic extends AbstractFactory {
         }
 
         private Chromosome runGA(){
-            generationParamForMutate = Math.pow(1.0 - generationIndex / generationsMaxCount, 2);
+            generationParamForMutate = Math.pow(1.0 - generationIndex / generationsMaxCount, 1);
             initGeneration();
             Chromosome chr = population.peek();
             while(chr.fitness() > stoppingCriteria && generationIndex < generationsMaxCount){

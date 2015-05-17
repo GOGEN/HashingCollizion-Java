@@ -10,10 +10,6 @@ public interface Factory {
         return new Bruteforse(ring, delta);
     }
 
-    public static Factory initSimpleBruteforse(int ring, double delta){
-        return new SimpleBruteforse(ring, delta);
-    }
-
     public static Factory initGenetic(int ring, double delta){
         return new Genetic(ring, delta);
     }
