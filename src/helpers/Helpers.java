@@ -12,7 +12,7 @@ public class Helpers {
     public static double getMaxForAllX(double[] listOfCos, int ring, double previousDelta, int[] set){
         double resultingDelta = 0;
         for(int x = 1; x <= ring/2; x++){
-            float currentDelta = Math.abs(partialSum(listOfCos, ring, set, x));
+            float currentDelta = Math.abs(partialMulti(listOfCos, ring, set, x));
             if(currentDelta > previousDelta){
                 resultingDelta = previousDelta;
                 break;
@@ -25,7 +25,7 @@ public class Helpers {
     public static double getMaxForAllXOrOne(double[] listOfCos, int ring, double previousDelta, int[] set){
         double resultingDelta = 0;
         for(int x = 1; x <= ring/2; x++){
-            float currentDelta = Math.abs(partialSum(listOfCos, ring, set, x));
+            float currentDelta = Math.abs(partialMulti(listOfCos, ring, set, x));
             if(currentDelta > previousDelta){
                 resultingDelta = 1.0;
                 break;
@@ -47,6 +47,14 @@ public class Helpers {
         return sum / set.length;
     }
 
+    private static float partialMulti(double[] listOfCos, int ring, int[] set, int x) {
+        float mult = 1;
+        for (int s : set) {
+            mult *= listOfCos[x * s % ring];
+        }
+        return mult;
+    }
+
     public static int getLowerBound()
     {
         return 2;
@@ -58,7 +66,7 @@ public class Helpers {
     public static double[] calcListOfCos(int ring){
         double[] list = new double[ring];
         for(int i = 0; i < list.length; i++){
-            list[i] = Math.cos(2 * Math.PI * i / ring);
+            list[i] = Math.cos(Math.PI * i / ring);
         }
         return list;
     }
